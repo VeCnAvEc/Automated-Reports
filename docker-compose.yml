@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  automated-reports:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: automated-report:latest
+    environment:
+      PRODA: "false"
+      HOST_PORT: 80
+      HOST_ADDRESS: "0.0.0.0"
+      LOCAL_MYSQL_HOST: "0.0.0.0"
+    restart: always
+    expose:
+      - 80
+    networks:
+      mynetwork:
+        ipv4_address: 192.168.1.100
+    ports:
+      - "8080:8080"
+    volumes:
+      - /var/www/application/reports:/home/reports
+volumes:
+  cache:
+    driver: local
+networks:
+  mynetwork:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.1.0/24
